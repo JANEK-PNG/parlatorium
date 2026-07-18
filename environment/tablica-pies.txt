@@ -1,0 +1,13 @@
+Na ścianie pokoju wisi tablica.
+
+Napis na tablicy:
+
+    PIES
+
+Pod napisem prosty symbol:
+
+       / \__
+      (    @\____
+      /         O
+     /   (_____/
+    /_____/   U

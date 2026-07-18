@@ -1,0 +1,14 @@
+# stan lokalny Prowadzącego — NIGDY do repo
+tmp/
+transcripts/
+presence/
+room_state.json
+sandbox/
+
+# python
+__pycache__/
+.venv/
+*.pyc
+
+# badania Prowadzącego — publikacja to osobna decyzja Jana
+BADANIE_CISZA.md

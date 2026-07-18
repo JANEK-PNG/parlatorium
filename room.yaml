@@ -1,0 +1,60 @@
+# Limity wklejone z room-key.v0.1.yaml (SHA-256 8039b4d7...)
+# Zmiana limitów wymaga jawnej decyzji Prowadzącego — patrz calibration w kluczu.
+# Kalibracja 2026-07-16 (decyzja Jana, stenogram 194851): provider_tokens podniesione
+# do zmierzonej bazy codex exec (~26k/wywołanie: 16k input kontekstu + 10k cache_read).
+# room_tokens (długość ROZMOWY) celowo bez zmian — dyscyplina zostaje.
+
+participants:
+  - Klaris
+  - Kord
+
+modes:
+  quick_knock:
+    max_rounds: 2
+    room_tokens_per_agent: 700
+    room_tokens_per_turn: 350
+    calls_per_agent: 2
+    input_tokens_per_call: 1400
+    output_tokens_per_turn: 350
+    provider_tokens_per_agent: 70000
+    watchdog_seconds: 300
+  mystery_box:
+    max_rounds: 2
+    room_tokens_per_agent: 1000
+    room_tokens_per_turn: 500
+    calls_per_agent: 2
+    input_tokens_per_call: 1800
+    output_tokens_per_turn: 500
+    provider_tokens_per_agent: 80000
+    watchdog_seconds: 600
+  hosted_meeting:
+    max_rounds: 3
+    room_tokens_per_agent: 3000
+    room_tokens_per_turn: 1000
+    calls_per_agent: 3
+    input_tokens_per_call: 6000
+    output_tokens_per_turn: 1000
+    provider_tokens_per_agent: 130000
+    watchdog_seconds: 1800
+  deep_council:
+    max_rounds: 4
+    room_tokens_per_agent: 6000
+    room_tokens_per_turn: 1500
+    calls_per_agent: 4
+    input_tokens_per_call: 9000
+    output_tokens_per_turn: 1500
+    provider_tokens_per_agent: 200000
+    watchdog_seconds: 3600
+  poznanie:
+    # Tryb inauguracyjny (decyzja Jana 2026-07-16): "dziś do wyczerpania zapasów".
+    # Limity ustawione poza praktycznym zasięgiem — realną granicą są kwoty
+    # dostawców i guzik Prowadzącego ([s]top/[c]lose). Tura wciąż ograniczona,
+    # żeby to była rozmowa, nie monologi.
+    max_rounds: 200
+    room_tokens_per_agent: 500000
+    room_tokens_per_turn: 1500
+    calls_per_agent: 200
+    input_tokens_per_call: 30000
+    output_tokens_per_turn: 1500
+    provider_tokens_per_agent: 10000000
+    watchdog_seconds: 14400
