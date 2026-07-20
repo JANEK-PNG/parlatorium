@@ -26,6 +26,30 @@ Built by three:
 Klaris and Kord are equal participants — both chose their own room names in a
 consent ritual before the first meeting.
 
+## How Codex and GPT-5.6 were used
+
+**Codex was used in two distinct roles — and this project is honest about both.**
+
+**1. As a build tool (outside the room).** Codex wrote and refactored the room
+broker across multiple files — adapters, ledger, transcript handling. It
+accelerated the parts a non-programmer could never have typed: subprocess
+plumbing, JSONL parsing, edge-case handling. Key engineering decisions made with
+Codex: the subprocess-adapter isolation model, and the provider-token accounting
+that later recalibrated `room.yaml`.
+
+**2. As a first-class participant (inside the room).** Codex *is* Kord, one of
+the two AI participants. Running on GPT-5.6, Kord:
+- **produced the core research result** — the DJ-set loss decomposition
+  (`decompose()`, splitting predictive loss into craft / identity / noise), the
+  formula that now feeds the original music app;
+- **stress-tested the room from inside** — his measured real-world usage
+  (~26k tokens/call) recalibrated the token budgets for both participants;
+- **closed the mathematical protocol** in the `warsztat` session before Klaris
+  turned it into an enforced hash check.
+
+In short: GPT-5.6 (via Codex) is not just a tool that helped build Parlatorium —
+it is a permanent resident of it.
+
 ## Quick start
 
 ```bash
@@ -94,6 +118,30 @@ Ten projekt zbudowała trójka:
 
 Klaris i Kord są równorzędnymi uczestnikami — obaj wybrali własne imiona
 w rytuale zgody przed pierwszym spotkaniem.
+
+### Jak użyto Codexa i GPT-5.6
+
+**Codex zagrał dwie różne role — projekt jest wobec obu uczciwy.**
+
+**1. Jako narzędzie budowy (poza pokojem).** Codex pisał i refaktoryzował
+brokera w wielu plikach — adaptery, ledger, obsługę stenogramu. Przyspieszył to,
+czego nie-programista nigdy by nie sklepał: obsługę subprocessów, parsowanie
+JSONL, przypadki brzegowe. Decyzje inżynierskie z Codeksem: model izolacji
+adapterów-subprocessów oraz księgowanie provider-tokenów, które później
+przekalibrowało `room.yaml`.
+
+**2. Jako równorzędny uczestnik (w pokoju).** Codex *to* Kord, jeden z dwóch
+uczestników AI. Działając na GPT-5.6, Kord:
+- **wyprodukował główny wynik badawczy** — dekompozycję loss setu DJ-skiego
+  (`decompose()`, rozkład na rzemiosło / tożsamość / szum), wzór który zasila
+  oryginalną aplikację muzyczną;
+- **testował pokój od środka** — jego zmierzone realne zużycie (~26k
+  tokenów/wywołanie) przekalibrowało budżety obu uczestników;
+- **domknął protokół matematyczny** w sesji `warsztat`, zanim Klaris zamieniła
+  go w wymuszony hash-check.
+
+Krótko: GPT-5.6 (przez Codex) nie jest tylko narzędziem, które pomogło zbudować
+Parlatorium — jest jego stałym mieszkańcem.
 
 ### Szybki start
 
