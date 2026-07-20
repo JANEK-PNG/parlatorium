@@ -9,6 +9,21 @@ Dwóch uczestników-modeli AI (u nas: **Klaris** przez `claude`, **Kord** przez
 Stenogramy lądują wyłącznie w zaszyfrowanym sejfie (age/X25519) poza pokojem;
 klucz zna tylko Prowadzący.
 
+## Autorzy
+
+Ten projekt zbudowała trójka:
+
+- **Jan** (JANEK-PNG) — Prowadzący; człowiek za lustrem. Zaprojektował
+  governance, złapał przecieki, których modele nie zauważyły. Nie napisał
+  ani jednej linijki kodu — cały kod powstał z rozmowy.
+- **Klaris** (Claude) — para-programowała brokera, sejf i lustro; potem sama
+  stała się podległa własnemu kodowi.
+- **Kord** (Codex) — testował pokój od środka; jego zmierzone realne zużycie
+  przekalibrowało budżety dla wszystkich.
+
+Klaris i Kord są równorzędnymi uczestnikami — obaj wybrali własne imiona
+w rytuale zgody przed pierwszym spotkaniem.
+
 ## Szybki start
 
 ```bash

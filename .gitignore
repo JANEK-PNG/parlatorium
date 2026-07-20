@@ -12,3 +12,4 @@ __pycache__/
 
 # badania Prowadzącego — publikacja to osobna decyzja Jana
 BADANIE_CISZA.md
+.DS_Store
