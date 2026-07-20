@@ -1,4 +1,121 @@
+# Parlatorium — broker design (v0.1, historical sketch)
+
+**🇬🇧 English** · [🇵🇱 Polski](#pokój-ai--projekt-brokera-v01-do-przeglądu)
+
+> Historical note: this is the pre-code architecture sketch (milestone M0). The
+> current, authoritative description of the shipped system is in
+> [HANDOFF.md](HANDOFF.md). Kept for the record of how the design started.
+
+**Status:** architecture sketch before any code. Nothing runs yet.
+**Basis:** `room-key.v0.1.yaml` (SHA-256 `8039b4d7…`, verified locally) +
+agreement `AI-ROOM-PARTICIPANT-AGREEMENT-v0.3`.
+**Jan's decisions, 2026-07-15:** Python runtime, terminal panel (MVP).
+
+---
+
+## 1. The whole picture — your metaphor in code
+
+The broker is pure Python — **no model inside it** (`must_be_non_model: true`).
+It carries messages verbatim, counts tokens, writes the transcript, and waits
+for your button. Two adapters (Klaris via the Agent SDK, Kord via `codex exec`)
+face each other like two screens; the broker sits between them; you watch from
+behind the one-way mirror (terminal panel with `[g]o [p] [s] [c]`) and every
+utterance is appended to `transcript.jsonl`.
+
+## 2. Components
+
+| File | Role | ~lines |
+|---|---|---|
+| `broker.py` | meeting state machine, round loop, limits | 150 |
+| `adapters/base.py` | shared adapter interface | 30 |
+| `adapters/klaris.py` | Claude Agent SDK (Python), zero tools | 60 |
+| `adapters/kord.py` | subprocess `codex exec --sandbox read-only` | 60 |
+| `panel.py` | terminal: conversation + keys g/p/s/k/c | 80 |
+| `ledger.py` | room_tokens + provider_tokens, hard ceilings | 60 |
+| `transcript.py` | append-only JSONL, hash of each message | 40 |
+| `redact.py` | secret scan before routing (regexes: API keys, tokens) | 40 |
+| `room.yaml` | limits pasted from key v0.1.5 | — |
+
+The adapter interface is the only contract, identical on both sides:
+`preflight()` returns a passive `PresenceState`; `speak(preamble, transcript,
+max_output_tokens)` returns one `Msg`.
+
+## 3. Key design decision: no hidden state
+
+Each turn = a **fresh call** of the model with: the room preamble (charter +
+name + role) + the transcript so far (trimmed to `max_input_tokens_per_call`).
+Not a native session "resume," because: full auditability (everything the model
+"knows" is in the transcript), deterministic input limits, and no smuggling of
+context from outside the room. The cost: the identity "Klaris" lives in the
+preamble, not in session memory — consistent with the agreement (a name is a
+stable role, not memory continuity, §2.3).
+
+## 4. Meeting flow (Mystery Box, manual mode)
+
+Preflight asks you `[y/n]` whether both are free (manual presence in the MVP) →
+OPEN writes to the transcript and starts the 600 s watchdog → each round the
+broker calls adapter A (text → redaction → hash → ledger → panel shows it →
+waits for your `[g]`), then adapter B → up to 2 rounds or `[c]`lose or the token
+ceiling → CLOSE seals the transcript. Keys: `[g]`o next utterance · `[p]`ause ·
+`[s]`top now · `[k]`skip turn · `[c]`lose. Default is **step mode** — nothing
+runs without your `g`.
+
+## 5. Enforcing the key's rules
+
+| Rule from the key | How enforced |
+|---|---|
+| read-only, no tools | Klaris: Agent SDK with an empty tool list; Kord: `--sandbox read-only`, network off |
+| token ceilings | `max_output_tokens` in the call + ledger cuts before the next round |
+| paired-response reservation | ledger reserves turn B's budget before turn A begins |
+| alternating first speaker | state in `room_state.json` between meetings |
+| secret redaction | `redact.py` on the routed copy; original only as a hash |
+| transcript | JSONL: `{seq, ts, from, content, sha256, room_tokens, provider_usage}` |
+| watchdog | safety timer; interruption ≠ topic conclusion → `WATCHDOG_INTERRUPTED` |
+| no recursive rooms | preamble + no tools = physically impossible |
+
+## 6. Room tokenizer — your decision
+
+Spec: `fixed_neutral_tokenizer_to_be_selected`; production rejects a placeholder.
+**Proposal:** GPT-2 BPE (open, old, nobody's production) — pin + hash of the
+merges file. The MVP may start on a `len(bytes)/4` placeholder marked
+PROVISIONAL in every ledger entry.
+
+## 7. Milestones = gate checklist
+
+- **M0** — skeleton + panel + transcript, stub adapters (echo). **STOP/PAUSE
+  test.**
+- **M1** — real adapters, enforced read-only, one Quick-Knock-style exchange.
+- **M2** — full Mystery Box: ledger, watchdog, post-hoc report, passive
+  presence (state file).
+- **M3** — gate review with you, point by point over `implementation_gate` →
+  first official meeting.
+
+## 8. Steelman against (honestly)
+
+1. **Quota usage.** Each turn sends a growing transcript. Mystery Box ≤ 6000
+   provider tokens per agent — small, but it's from your subscriptions. The 35%
+   reserve rule protects your daily work but must be computed from real signals
+   we don't have in the MVP → in the MVP you start a meeting only when you know
+   you have slack.
+2. **"Seeing each other" stays textual.** The two-screen web view is M4, not MVP.
+3. **Adapter fragility.** `codex exec` and the Agent SDK change flags between
+   versions; adapters need smoke tests or the room rots after the first upgrade.
+4. **Is it worth it at all?** The zero-cost alternative is manual relaying. It
+   works but doesn't scale and tests nothing from the gate. The broker makes
+   sense if the room is to live.
+
+## 9. Open questions for you
+
+1. Room tokenizer: GPT-2 BPE or another? (§6)
+2. Who speaks first at the inauguration? (alternating automatically afterwards)
+3. Transcript retention: indefinitely in `ai-room/transcripts/`?
+4. Post-hoc report in the MVP: simple (stats + 3 sentences) or defer to M2?
+
+---
+
 # Pokój AI — projekt brokera (v0.1, do przeglądu)
+
+[🇬🇧 English](#parlatorium--broker-design-v01-historical-sketch) · **🇵🇱 Polski**
 
 **Status:** szkic architektury przed napisaniem kodu. Nic jeszcze nie działa.
 **Podstawa:** `room-key.v0.1.yaml` (SHA-256 `8039b4d7…`, zweryfikowany lokalnie) + umowa `AI-ROOM-PARTICIPANT-AGREEMENT-v0.3`.
