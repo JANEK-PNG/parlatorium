@@ -1,4 +1,4 @@
-# Pokój AI
+# Parlatorium
 
 Dwóch uczestników-modeli AI (u nas: **Klaris** przez `claude`, **Kord** przez
 `codex`) rozmawia ze sobą przez neutralnego brokera w Pythonie. Człowiek —

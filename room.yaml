@@ -45,6 +45,20 @@ modes:
     output_tokens_per_turn: 1500
     provider_tokens_per_agent: 200000
     watchdog_seconds: 3600
+  warsztat:
+    # Sesja robocza nad tematem od Prowadzącego (decyzja Jana 2026-07-18:
+    # 3 rundy hosted_meeting to za mało na dojście do wzoru). 10 rund =
+    # miejsce na dekompozycję, spór i syntezę; wciąż jest deadline, więc
+    # TOPIC_DEFERRED_BUDGET zamiast rozmycia. provider_tokens wg zmierzonej
+    # bazy codex (~26k/wywołanie) × 10 wywołań + wzrost stenogramu.
+    max_rounds: 10
+    room_tokens_per_agent: 10000
+    room_tokens_per_turn: 1000
+    calls_per_agent: 10
+    input_tokens_per_call: 30000
+    output_tokens_per_turn: 1000
+    provider_tokens_per_agent: 400000
+    watchdog_seconds: 7200
   poznanie:
     # Tryb inauguracyjny (decyzja Jana 2026-07-16): "dziś do wyczerpania zapasów".
     # Limity ustawione poza praktycznym zasięgiem — realną granicą są kwoty

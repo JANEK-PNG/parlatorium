@@ -57,7 +57,8 @@ def check_tokenizer_pin(tok) -> bool:
 
 def main() -> int:
     parser = argparse.ArgumentParser(prog="room")
-    parser.add_argument("mode", choices=["quick_knock", "mystery_box", "hosted_meeting", "deep_council", "poznanie"])
+    parser.add_argument("mode", choices=["quick_knock", "mystery_box", "hosted_meeting",
+                                         "deep_council", "poznanie", "warsztat"])
     parser.add_argument("--adapters", choices=["echo", "real"], default="echo",
                         help="echo = atrapy (bez modeli); real = Klaris przez claude, Kord przez codex")
     parser.add_argument("--panel", choices=["terminal", "web"], default="terminal")

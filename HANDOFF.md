@@ -1,4 +1,4 @@
-# Pokój AI — przekazanie projektu
+# Parlatorium — przekazanie projektu
 
 Dokument dla dewelopera przejmującego lub stawiającego własną instancję.
 Stan na 2026-07-18. Testy: 44/44 (`uv run pytest`).
